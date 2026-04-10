@@ -4,10 +4,6 @@ const prisma = require("../../config/prisma");
 async function registerUser(payload) {
   const email = String(payload.email || "").trim().toLowerCase();
   const password = String(payload.password || "");
-  const neighborhoodId =
-    typeof payload.neighborhoodId === "string" && payload.neighborhoodId.trim()
-      ? payload.neighborhoodId.trim()
-      : null;
 
   const existingUser = await prisma.user.findUnique({
     where: { email }
@@ -31,7 +27,8 @@ async function registerUser(payload) {
       name,
       email,
       password: hashedPassword,
-      neighborhoodId
+      role: "USER",
+      neighborhoodId: null
     },
     select: {
       id: true,
@@ -49,4 +46,3 @@ async function registerUser(payload) {
 module.exports = {
   registerUser
 };
-
