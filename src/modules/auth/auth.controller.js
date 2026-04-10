@@ -1,5 +1,5 @@
-const { registerUser, loginUser } = require("./auth.service");
-const generateToken = require("../../utils/generateToken");
+import { registerUser, loginUser } from "./auth.service.js";
+import generateToken from "../../utils/generateToken.js";
 
 function isValidEmail(email) {
   return /\S+@\S+\.\S+/.test(email);
@@ -67,7 +67,11 @@ async function login(req, res, next) {
   }
 }
 
-module.exports = {
-  register,
-  login
-};
+function me(req, res) {
+  return res.status(200).json({
+    message: "Authenticated user fetched successfully",
+    user: req.user
+  });
+}
+
+export { register, login, me };
