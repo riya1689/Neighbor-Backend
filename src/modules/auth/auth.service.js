@@ -43,6 +43,41 @@ async function registerUser(payload) {
   return createdUser;
 }
 
+async function loginUser(payload) {
+  const email = String(payload.email || "").trim().toLowerCase();
+  const password = String(payload.password || "");
+
+  const user = await prisma.user.findUnique({
+    where: { email },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      neighborhoodId: true,
+      createdAt: true,
+      password: true
+    }
+  });
+
+  if (!user) {
+    const err = new Error("Invalid credentials");
+    err.statusCode = 401;
+    throw err;
+  }
+
+  const match = await bcrypt.compare(password, user.password);
+  if (!match) {
+    const err = new Error("Invalid credentials");
+    err.statusCode = 401;
+    throw err;
+  }
+
+  const { password: _password, ...userWithoutPassword } = user;
+  return userWithoutPassword;
+}
+
 module.exports = {
-  registerUser
+  registerUser,
+  loginUser
 };
