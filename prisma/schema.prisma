@@ -14,11 +14,29 @@ enum Role {
   ADMIN
 }
 
+model Neighborhood {
+  id          String @id @default(uuid())
+  name        String @unique
+  description String
+
+  users User[]
+  // posts Post[] — add when Post model exists (PRD: many posts per neighborhood)
+}
+
+model Category {
+  id   String @id @default(uuid())
+  name String @unique
+
+  // posts Post[] — add when Post model exists (PRD: many posts per category)
+}
+
 model User {
-  id        String   @id @default(uuid())
-  name      String
-  email     String   @unique
-  password  String
-  role      Role     @default(USER)
-  createdAt DateTime @default(now())
+  id              String         @id @default(uuid())
+  name            String
+  email           String         @unique
+  password        String
+  role            Role           @default(USER)
+  neighborhoodId  String?
+  neighborhood    Neighborhood?  @relation(fields: [neighborhoodId], references: [id], onDelete: SetNull)
+  createdAt       DateTime       @default(now())
 }
