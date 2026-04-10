@@ -20,14 +20,14 @@ model Neighborhood {
   description String
 
   users User[]
-  // posts Post[] — add when Post model exists (PRD: many posts per neighborhood)
+  posts Post[]
 }
 
 model Category {
   id   String @id @default(uuid())
   name String @unique
 
-  // posts Post[] — add when Post model exists (PRD: many posts per category)
+  posts Post[]
 }
 
 model User {
@@ -39,4 +39,25 @@ model User {
   neighborhoodId  String?
   neighborhood    Neighborhood?  @relation(fields: [neighborhoodId], references: [id], onDelete: SetNull)
   createdAt       DateTime       @default(now())
+
+  posts Post[]
+}
+
+model Post {
+  id             String   @id @default(uuid())
+  title          String
+  content        String
+  images         String[]
+  isPremium      Boolean  @default(false)
+  price          Float    @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  userId         String
+  neighborhoodId String
+  categoryId     String
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  neighborhood Neighborhood @relation(fields: [neighborhoodId], references: [id], onDelete: Cascade)
+  category     Category     @relation(fields: [categoryId], references: [id], onDelete: Restrict)
 }
