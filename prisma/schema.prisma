@@ -41,6 +41,11 @@ model User {
   createdAt       DateTime       @default(now())
 
   posts Post[]
+  comments Comment[]
+
+  // Social graph (self-relation through Follow join table)
+  following Follow[] @relation("UserFollowing")
+  followers Follow[] @relation("UserFollowers")
 }
 
 model Post {
@@ -60,4 +65,30 @@ model Post {
   user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   neighborhood Neighborhood @relation(fields: [neighborhoodId], references: [id], onDelete: Cascade)
   category     Category     @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+
+  comments Comment[]
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+
+  userId String
+  postId String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+model Follow {
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+
+  follower  User @relation("UserFollowing", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("UserFollowers", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@id([followerId, followingId])
+  @@index([followingId])
 }
