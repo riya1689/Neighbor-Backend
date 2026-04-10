@@ -1,5 +1,5 @@
-const bcrypt = require("bcryptjs");
-const prisma = require("../../config/prisma");
+import bcrypt from "bcryptjs";
+import prisma from "../../config/prisma.js";
 
 async function registerUser(payload) {
   const email = String(payload.email || "").trim().toLowerCase();
@@ -77,7 +77,4 @@ async function loginUser(payload) {
   return userWithoutPassword;
 }
 
-module.exports = {
-  registerUser,
-  loginUser
-};
+export { registerUser, loginUser };

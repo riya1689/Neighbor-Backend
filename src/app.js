@@ -1,8 +1,9 @@
-const express = require("express");
-const cors = require("cors");
+import express from "express";
+import cors from "cors";
 
-const routes = require("./routes");
-const notFound = require("./middleware/notFound");
+import routes from "./routes/index.js";
+import notFound from "./middleware/notFound.js";
+import errorHandler from "./middleware/errorHandler.js";
 
 const app = express();
 
@@ -16,5 +17,8 @@ app.use("/api", routes);
 // 404 handler
 app.use(notFound);
 
-module.exports = app;
+// Global error handler (Milestone 1)
+app.use(errorHandler);
+
+export default app;
 
