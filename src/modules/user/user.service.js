@@ -7,7 +7,9 @@ export const updateNeighborhood = async (userId, neighborhoodId) => {
   });
 
   if (!neighborhood) {
-    throw new Error('Neighborhood not found');
+    const error = new Error('Neighborhood not found');
+    error.statusCode = 404;
+    throw error;
   }
 
   // 2. Update user
