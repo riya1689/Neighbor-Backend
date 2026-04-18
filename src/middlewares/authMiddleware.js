@@ -2,11 +2,7 @@ import jwt from "jsonwebtoken";
 import prisma from "../config/prisma.js";
 import { JWT_SECRET } from "../config/env.js";
 
-/**
- * Primary authentication middleware to verify JWT
- */
-
-export const authMiddleware = async (req, res, next) => {
+export const protect = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization || "";
     let token = "";
@@ -24,7 +20,7 @@ export const authMiddleware = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, JWT_SECRET);
-    // Note: Using decoded.userId to match your token payload
+
     const user = await prisma.user.findUnique({
       where: { id: decoded.userId },
       select: {
@@ -51,10 +47,11 @@ export const authMiddleware = async (req, res, next) => {
     return next(err);
   }
 }
+
 export const restrictTo = (...roles) => {
   return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
-      const err = new Error(`Forbidden: You do not have permission (${req.user.role})`);
+    if (!req.user || !roles.includes(req.user.role)) {
+      const err = new Error("Forbidden: You do not have permission to perform this action");
       err.statusCode = 403;
       return next(err);
     }
@@ -62,5 +59,5 @@ export const restrictTo = (...roles) => {
   };
 };
 
-export default authMiddleware;
+export default protect;
 
