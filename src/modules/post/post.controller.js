@@ -16,3 +16,18 @@ export const createPost = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getFeed = async (req, res, next) => {
+  try {
+    const userNeighborhoodId = req.user.neighborhoodId;
+    const posts = await postService.getFeed(userNeighborhoodId);
+
+    res.status(200).json({
+      status: "success",
+      results: posts.length,
+      data: posts
+    });
+  } catch (error) {
+    next(error);
+  }
+};

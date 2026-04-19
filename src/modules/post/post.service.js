@@ -3,7 +3,7 @@ import prisma from "../../config/prisma.js";
 export const createPost = async (userId, userNeighborhoodId, postData) => {
   // PRD Validation: Compare userNeighborhoodId with postData.neighborhoodId.
   if (userNeighborhoodId !== postData.neighborhoodId) {
-    const error = new Error("Unauthorized: You can only create posts in your joined neighborhood");
+    const error = new Error("Forbidden: You can only post in your own neighborhood");
     error.statusCode = 403;
     throw error;
   }
@@ -20,8 +20,28 @@ export const createPost = async (userId, userNeighborhoodId, postData) => {
       userId,
       neighborhoodId,
       categoryId
+    },
+    include: {
+      category: {
+        select: {
+          name: true
+        }
+      }
     }
   });
 
   return post;
+};
+
+export const getFeed = async (neighborhoodId) => {
+  const posts = await prisma.post.findMany({
+    where: { neighborhoodId },
+    orderBy: { createdAt: "desc" },
+    include: {
+      user: { select: { name: true } },
+      category: { select: { name: true } }
+    }
+  });
+
+  return posts;
 };

@@ -8,5 +8,6 @@ const router = express.Router();
 router.use(protect);
 
 router.post("/", postController.createPost);
+router.get("/feed", postController.getFeed);
 
 export default router;
