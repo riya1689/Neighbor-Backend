@@ -101,6 +101,8 @@ model Post {
 
   comments Comment[]
   votes Vote[]
+  @@index([neighborhoodId]) // Fast filtering for the Home Feed
+  @@index([categoryId])     // Fast filtering for Category searches
 }
 
 model Comment {
