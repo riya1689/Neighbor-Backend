@@ -1,7 +1,7 @@
-const { PrismaClient } = require("@prisma/client");
+import { PrismaClient } from "@prisma/client";
 
 // Normalizes DATABASE_URL (SSL, Neon pooler) before any Prisma use
-const { DATABASE_URL } = require("./env");
+import { DATABASE_URL } from "./env.js";
 
 const globalForPrisma = globalThis;
 
@@ -28,4 +28,4 @@ const prisma = globalForPrisma.prisma ?? createPrismaClient();
 // In dev, global survives nodemon reloads so connections are not leaked.
 globalForPrisma.prisma = prisma;
 
-module.exports = prisma;
+export default prisma;
