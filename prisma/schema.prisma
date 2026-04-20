@@ -141,10 +141,11 @@ model Vote {
 }
 
 model Notification {
-  id      String           @id @default(uuid())
-  message String
-  type    NotificationType
-  isRead  Boolean          @default(false)
+  id        String           @id @default(uuid())
+  message   String
+  type      NotificationType
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
 
   userId String
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
