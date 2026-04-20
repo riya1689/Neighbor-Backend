@@ -56,6 +56,13 @@ export const JWT_SECRET = getRequiredEnv("JWT_SECRET");
 export const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "7d";
 export { PORT };
 
+export const SSL_STORE_ID = getRequiredEnv("SSL_STORE_ID");
+export const SSL_STORE_PASS = getRequiredEnv("SSL_STORE_PASS");
+export const SSL_IS_SANDBOX = process.env.SSL_IS_SANDBOX === "true";
+export const SSL_SUCCESS_URL = getRequiredEnv("SSL_SUCCESS_URL");
+export const SSL_FAIL_URL = getRequiredEnv("SSL_FAIL_URL");
+export const SSL_CANCEL_URL = getRequiredEnv("SSL_CANCEL_URL");
+
 // import dotenv from "dotenv";
 // import path from "path";
 // import { fileURLToPath } from "url";

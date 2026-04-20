@@ -8,6 +8,7 @@ import commentRoutes from "../modules/comment/comment.routes.js";
 import followRoutes from "../modules/follow/follow.routes.js";
 import voteRoutes from "../modules/vote/vote.routes.js";
 import notificationRoutes from "../modules/notification/notification.routes.js";
+import paymentRoutes from "../modules/payment/payment.routes.js";
 const router = express.Router();
 
 router.use("/health", healthRoutes);
@@ -18,5 +19,6 @@ router.use("/posts", postRoutes);
 router.use("/posts", commentRoutes);
 router.use("/posts", voteRoutes);
 router.use("/notifications", notificationRoutes);
+router.use("/payments", paymentRoutes);
 export default router;
 
