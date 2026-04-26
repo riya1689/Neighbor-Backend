@@ -1,15 +1,21 @@
 import express from "express";
 import cors from "cors";
+import helmet from "helmet";
+import hpp from "hpp";
 
 import routes from "./routes/index.js";
 import notFound from "./middleware/notFound.js";
 import errorHandler from "./middleware/errorHandler.js";
+import { globalLimiter } from "./middlewares/rateLimiter.js";
 
 const app = express();
 
 // Security/UX defaults
+app.use(helmet());
+app.use(globalLimiter);
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '10kb' }));
+app.use(hpp());
 
 // API routes
 app.use("/api", routes);
