@@ -1,5 +1,5 @@
 import express from "express";
-import authMiddleware from "../../middleware/auth.js";
+import authMiddleware from "../../middlewares/authMiddleware.js";
 import {
   initiatePayment,
   paymentSuccess,
