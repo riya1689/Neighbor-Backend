@@ -7,13 +7,23 @@ import routes from "./routes/index.js";
 import notFound from "./middleware/notFound.js";
 import errorHandler from "./middleware/errorHandler.js";
 import { globalLimiter } from "./middlewares/rateLimiter.js";
+import { ALLOWED_ORIGINS } from "./config/env.js";
 
 const app = express();
 
 // Security/UX defaults
 app.use(helmet());
 app.use(globalLimiter);
-app.use(cors());
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+}));
 app.use(express.json({ limit: '10kb' }));
 app.use(hpp());
 
