@@ -51,6 +51,9 @@ export function getRequiredEnv(name) {
   return String(value);
 }
 
+export const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS 
+  ? process.env.ALLOWED_ORIGINS.split(',') 
+  : ['http://localhost:3000'];
 export const DATABASE_URL = getRequiredEnv("DATABASE_URL");
 export const JWT_SECRET = getRequiredEnv("JWT_SECRET");
 export const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "7d";
